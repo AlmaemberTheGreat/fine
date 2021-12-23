@@ -1,0 +1,37 @@
+
+.\" Manual page for fine
+.\" See COPYING in the sources for licence and copyright information
+.TH FINE 1 "DECEMBER 2021" Linux "User Manuals"
+.SH NAME
+.B fine
+\- a simple benchmarking tool
+
+.SH SYNOPSIS
+.B fine [
+.I options
+.B ]
+.I command
+
+.SH OPTIONS
+
+.IP "-w n"
+Set the number of warmup runs (default: 0).
+.IP "-r n"
+Set the number of runs (default: 0).
+.IP "-p command"
+Set the preparation command (ran before every test run).
+.IP "-q"
+Disable progress output.
+
+.SH COPYRIGHT
+.B fine
+is licensed under the 3-clause BSD licence. It should be in the source distribution.
+
+.B Copyright (C)
+2021 almaember
+
+.SH CONTACT
+If you have found bugs in
+.B
+fine,
+or want to contact me for any other reason, please write to `almaember@almaember.com'.
