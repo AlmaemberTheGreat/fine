@@ -1,0 +1,4 @@
+enum Phase {
+	WARMUP,
+	TESTING
+};
