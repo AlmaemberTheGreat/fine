@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "con.h"
@@ -14,7 +15,7 @@
 static bool parsenum(char *str, unsigned long *out);
 
 static void execute(char *args[], size_t len);
-static int  runprg(char *args[], size_t len);
+static int  runprg(char *args[], size_t len, unsigned long long *delta);
 
 static unsigned long nwarmup = 0,
                      nrun    = 0;
@@ -40,6 +41,14 @@ static void
 execute(char *args[], size_t len)
 {
 	size_t i;
+	unsigned long long delta,
+	                   whole = 0,
+	                   avg,
+	                   min = 0,
+	                   max = 0;
+	double             maxsec,
+	                   minsec,
+	                   avgsec;
 
 	putchar('\n');
 
@@ -50,20 +59,31 @@ execute(char *args[], size_t len)
 
 	for (i = 0; i < nwarmup; ++i) {
 		if (!quiet) prstat(WARMUP, nwarmup, i + 1);
-		runprg(args, len);
+		runprg(args, len, NULL);
 	}
 
 	for (i = 0; i < nrun; ++i) {
 		if (!quiet) prstat(TESTING, nrun, i + 1);
-		runprg(args, len);
+		runprg(args, len, &delta);
+		whole += delta;
+		if (delta < min || min == 0) min = delta;
+		if (delta > max) max = delta;
 	}
+
+	avg = whole / nrun;
+
+	maxsec = (double)max / 1000000;
+	minsec = (double)min / 1000000;
+	avgsec = (double)avg / 1000000;
+	fprintf(stderr, "minimum: %.3fs\nmaximum: %.3fs\naverage: %.3fs\n", minsec, maxsec, avgsec);
 }
 
 static int
-runprg(char *args[], size_t len)
+runprg(char *args[], size_t len, unsigned long long *delta)
 {
 	pid_t id;
 	int status;
+	struct timespec beg, end;
 
 	id = fork();
 	if (id < 0) {
@@ -72,7 +92,10 @@ runprg(char *args[], size_t len)
 		exit(EXIT_FAILURE);
 	} else if (id > 0) {
 		/* parent process */
+		clock_gettime(CLOCK_MONOTONIC_RAW, &beg);
 		wait(&status);
+		clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+		if (delta != NULL) *delta = (end.tv_sec - beg.tv_sec) * 1000000 + (end.tv_nsec - beg.tv_nsec) / 1000;
 	} else {
 		/* child process */
 		int fd;
