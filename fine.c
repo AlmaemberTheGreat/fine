@@ -85,6 +85,8 @@ runprg(char *args[], size_t len, unsigned long long *delta)
 	int status;
 	struct timespec beg, end;
 
+	if (prepcmd != NULL) system(prepcmd);
+
 	id = fork();
 	if (id < 0) {
 		/* failed */
