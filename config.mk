@@ -8,7 +8,7 @@ CC ?= cc
 
 # Paths
 PREFIX = /usr/local
-MANPREFIX = ${PREFIX}/share/local
+MANPREFIX = ${PREFIX}/share/man/man1
 
 # Flags
 CPPFLAGS = -DVERSION=\"${VERSION}\" -D_XOPEN_SOURCE=600

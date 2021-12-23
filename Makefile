@@ -24,6 +24,13 @@ clean:
 	@echo CLEAN
 	@rm -f fine ${OBJ}
 
+install: clean all
+	@echo Installing
+	@cp fine.1 ${MANPREFIX}/fine.1
+	@cp fine ${PREFIX}/bin/fine
+	@chmod o=rx,g=rx,u=rwx ${PREFIX}/bin/fine
+	@chmod o=r,g=r,u=rw ${MANPREFIX}/fine.1
+
 .SUFFIXES: .c .o
 
-.PHONY: all clean
+.PHONY: all clean install
