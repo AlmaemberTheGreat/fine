@@ -17,7 +17,7 @@ prstat(enum Phase phase, unsigned long max, unsigned long val)
 		msg = "Testing...";
 
 	/* Go to beginning of line */
-	fputs(ESC "[1F", stderr);
+	fputs(ESC "[1F" ESC "[K", stderr);
 	fflush(stderr);
 
 	fprintf(stderr, "%s (%lu/%lu)\n", msg, val, max);

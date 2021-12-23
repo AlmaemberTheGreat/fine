@@ -41,18 +41,20 @@ execute(char *args[], size_t len)
 {
 	size_t i;
 
+	putchar('\n');
+
 	if (len < 1) {
 		fprintf(stderr, "a command is required\n");
 		exit(EXIT_FAILURE);
 	}
 
 	for (i = 0; i < nwarmup; ++i) {
-		prstat(WARMUP, nwarmup, i + 1);
+		if (!quiet) prstat(WARMUP, nwarmup, i + 1);
 		runprg(args, len);
 	}
 
 	for (i = 0; i < nrun; ++i) {
-		prstat(TESTING, nrun, i + 1);
+		if (!quiet) prstat(TESTING, nrun, i + 1);
 		runprg(args, len);
 	}
 }
@@ -83,8 +85,8 @@ runprg(char *args[], size_t len)
 			exit(EXIT_FAILURE);
 		}
 
-		/*dup2(fd, 1);
-		dup2(fd, 2);*/
+		dup2(fd, 1);
+		dup2(fd, 2);
 
 		execvp(args[0], args);
 		/* if we're still here, something bad happened */
