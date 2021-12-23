@@ -9,8 +9,8 @@ OBJ = ${SRC:.c=.o}
 all: fine
 
 ${OBJ}: config.mk Makefile
-fine.o: fine.c
-con.o: con.c
+fine.o: fine.c con.h
+con.o: con.c con.h
 
 fine: ${OBJ}
 	@echo CC -o $@

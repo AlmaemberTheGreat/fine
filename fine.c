@@ -34,7 +34,10 @@ parsenum(char *str, unsigned long *out)
 static void
 execute(char *args[], size_t len)
 {
-	puts("");
+	for (int i = 0; i < 100; ++i) {
+		prstat(TESTING, 100, i);
+		sleep(1);
+	}
 }
 
 int
