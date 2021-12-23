@@ -5,6 +5,8 @@ It also had a bunch of features I didn't need.
 
 So I decided to rewrite some of it in C. The result is a (I think) Unixy tool that can do much of the same in much less code. Enjoy!
 
+Yes, the name is a joke.
+
 (P.S. I have nothing against `hyperfine`, I just wanted to make my own.)
 
 [1]: https://github.com/sharkdp/hyperfine
