@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -13,7 +14,7 @@
 static bool parsenum(char *str, unsigned long *out);
 
 static void execute(char *args[], size_t len);
-static void runprg(char *args[], size_t len);
+static int  runprg(char *args[], size_t len);
 
 static unsigned long nwarmup = 0,
                      nrun    = 0;
@@ -56,10 +57,11 @@ execute(char *args[], size_t len)
 	}
 }
 
-static void
+static int
 runprg(char *args[], size_t len)
 {
 	pid_t id;
+	int status;
 
 	id = fork();
 	if (id < 0) {
@@ -68,6 +70,7 @@ runprg(char *args[], size_t len)
 		exit(EXIT_FAILURE);
 	} else if (id > 0) {
 		/* parent process */
+		wait(&status);
 	} else {
 		/* child process */
 		int fd;
@@ -88,6 +91,8 @@ runprg(char *args[], size_t len)
 		perror("failed to exec");
 		exit(EXIT_FAILURE);
 	}
+
+	return status;
 }
 
 int
