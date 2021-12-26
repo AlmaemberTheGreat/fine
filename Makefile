@@ -33,7 +33,7 @@ install: clean all
 
 dist: clean
 	@mkdir fine-${VERSION}
-	@cp con.c con.h config.mk Makefile fine.1 fine.c COPYING fine-${VERSION}
+	@cp cons.c cons.h config.mk Makefile fine.1 fine.c COPYING fine-${VERSION}
 	@tar -cf fine-${VERSION}.tar fine-${VERSION}
 	@rm -rf fine-${VERSION}
 	@gzip fine-${VERSION}.tar
