@@ -127,7 +127,7 @@ main(int argc, char *argv[])
 {
 	char opt;
 
-	while ((opt = getopt(argc, argv, ":w:r:p:q")) != -1) {
+	while ((opt = getopt(argc, argv, ":w:r:p:qvh")) != -1) {
 		switch (opt) {
 		case 'w': {
 			if (!parsenum(optarg, &nwarmup)) {
@@ -159,6 +159,14 @@ main(int argc, char *argv[])
 			puts("fine v" VERSION " -- a simple benchmarking tool");
 			puts("Copyright 2021 almaember. Licensed under the 3-clause BSD licence.");
 			puts("Check the source distribution for more information.");
+			exit(EXIT_SUCCESS);
+		}
+
+		case 'h': {
+			puts("Check the manpage (man fine) for more information.");
+			puts("If you have not installed the program,\n"
+				 "go to the source directory and type 'man ./fine.1'.");
+			exit(EXIT_SUCCESS);
 		}
 
 		case ':':
