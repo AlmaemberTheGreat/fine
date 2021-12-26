@@ -18,7 +18,7 @@ static void execute(char *args[], size_t len);
 static int  runprg(char *args[], size_t len, unsigned long long *delta);
 
 static unsigned long nwarmup = 0,
-                     nrun    = 0;
+                     nrun    = 10;
 static char         *prepcmd = NULL;
 static bool          quiet   = false;
 
@@ -51,11 +51,6 @@ execute(char *args[], size_t len)
 	                   avgsec;
 
 	putchar('\n');
-
-	if (len < 1) {
-		fprintf(stderr, "a command is required\n");
-		exit(EXIT_FAILURE);
-	}
 
 	for (i = 0; i < nwarmup; ++i) {
 		if (!quiet) prstat(WARMUP, nwarmup, i + 1);
@@ -183,6 +178,11 @@ main(int argc, char *argv[])
 
 	if (nrun == 0) {
 		fputs("The number of runs must not equal zero.\n", stderr);
+		exit(EXIT_FAILURE);
+	}
+
+	if (argc - optind < 1) {
+		fprintf(stderr, "a command is required\n");
 		exit(EXIT_FAILURE);
 	}
 
