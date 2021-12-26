@@ -1,6 +1,7 @@
 /* See COPYING for licence and copyright information */
 
 #include <errno.h>
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,6 +14,7 @@
 #include "con.h"
 
 static bool parsenum(char *str, unsigned long *out);
+static inline unsigned long long timespec_to_us(struct timespec t);
 
 static void execute(char *args[], size_t len);
 static int  runprg(char *args[], size_t len, unsigned long long *delta);
@@ -36,6 +38,23 @@ parsenum(char *str, unsigned long *out)
 
 	*out = num;
 	return true;
+}
+
+static inline unsigned long long
+timespec_to_us(struct timespec t)
+{
+	unsigned long long res = 0;
+
+	if (t.tv_sec > ULLONG_MAX / 1000000) {
+		/* would overflow */
+		fputs("fine: error: the time is too long and would cause an overflow\n", stderr);
+		exit(EXIT_FAILURE);
+	}
+
+	res += t.tv_sec * 1000000;
+	res += t.tv_nsec / 1000;
+
+	return res;
 }
 
 static void
@@ -95,7 +114,7 @@ runprg(char *args[], size_t len, unsigned long long *delta)
 		clock_gettime(CLOCK_MONOTONIC, &beg);
 		wait(&status);
 		clock_gettime(CLOCK_MONOTONIC, &end);
-		if (delta != NULL) *delta = (end.tv_sec - beg.tv_sec) * 1000000 + (end.tv_nsec - beg.tv_nsec) / 1000;
+		if (delta != NULL) *delta = timespec_to_us(end) - timespec_to_us(beg);
 	} else {
 		/* child process */
 		int fd;
