@@ -3,14 +3,14 @@
 
 include config.mk
 
-SRC = fine.c con.c
+SRC = fine.c cons.c
 OBJ = ${SRC:.c=.o}
 
 all: fine
 
 ${OBJ}: config.mk Makefile
-fine.o: fine.c con.h
-con.o: con.c con.h
+fine.o: fine.c cons.h
+cons.o: cons.c cons.h
 
 fine: ${OBJ}
 	@echo CC -o $@

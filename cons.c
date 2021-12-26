@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include "con.h"
+#include "cons.h"
 
 #define ESC "\x1B"
 

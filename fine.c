@@ -11,7 +11,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "con.h"
+#include "cons.h"
 
 static bool parsenum(char *str, unsigned long *out);
 static inline unsigned long long timespec_to_us(struct timespec t);
