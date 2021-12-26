@@ -20,7 +20,8 @@ static int  runprg(char *args[], size_t len, unsigned long long *delta);
 static unsigned long nwarmup = 0,
                      nrun    = 10;
 static char         *prepcmd = NULL;
-static bool          quiet   = false;
+static bool          quiet   = false,
+                     mout    = false;
 
 static bool
 parsenum(char *str, unsigned long *out)
@@ -50,19 +51,20 @@ execute(char *args[], size_t len)
 	                   minsec,
 	                   avgsec;
 
-	putchar('\n');
+	if (!quiet && !mout) putchar('\n');
 
 	for (i = 0; i < nwarmup; ++i) {
-		if (!quiet) prstat(WARMUP, nwarmup, i + 1);
+		if (!quiet && !mout) prstat(WARMUP, nwarmup, i + 1);
 		runprg(args, len, NULL);
 	}
 
 	for (i = 0; i < nrun; ++i) {
-		if (!quiet) prstat(TESTING, nrun, i + 1);
+		if (!quiet && !mout) prstat(TESTING, nrun, i + 1);
 		runprg(args, len, &delta);
 		whole += delta;
 		if (delta < min || min == 0) min = delta;
 		if (delta > max) max = delta;
+		if (mout) printf("%f\n", (double)delta / 1000000);
 	}
 
 	avg = whole / nrun;
@@ -70,7 +72,8 @@ execute(char *args[], size_t len)
 	maxsec = (double)max / 1000000;
 	minsec = (double)min / 1000000;
 	avgsec = (double)avg / 1000000;
-	fprintf(stderr, "minimum: %.3fs\nmaximum: %.3fs\naverage: %.3fs\n", minsec, maxsec, avgsec);
+	if (!mout) fprintf(stderr, "minimum: %.3fs\nmaximum: %.3fs\naverage: %.3fs\n", minsec, maxsec, avgsec);
+	else       printf("%f %f %f\n", minsec, maxsec, avgsec);
 }
 
 static int
@@ -122,7 +125,7 @@ main(int argc, char *argv[])
 {
 	char opt;
 
-	while ((opt = getopt(argc, argv, ":w:r:p:qvh")) != -1) {
+	while ((opt = getopt(argc, argv, ":w:r:p:qvhm")) != -1) {
 		switch (opt) {
 		case 'w': {
 			if (!parsenum(optarg, &nwarmup)) {
@@ -162,6 +165,11 @@ main(int argc, char *argv[])
 			puts("If you have not installed the program,\n"
 				 "go to the source directory and type 'man ./fine.1'.");
 			exit(EXIT_SUCCESS);
+		}
+
+		case 'm': {
+			mout = true;
+			break;
 		}
 
 		case ':':
