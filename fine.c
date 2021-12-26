@@ -155,6 +155,12 @@ main(int argc, char *argv[])
 			break;
 		}
 
+		case 'v': {
+			puts("fine v" VERSION " -- a simple benchmarking tool");
+			puts("Copyright 2021 almaember. Licensed under the 3-clause BSD licence.");
+			puts("Check the source distribution for more information.");
+		}
+
 		case ':':
 			fprintf(stderr, "%s: error -- option '%c' requires an argument\n", argv[0], optopt);
 			exit(EXIT_FAILURE);
