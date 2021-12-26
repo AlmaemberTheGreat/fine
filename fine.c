@@ -181,5 +181,10 @@ main(int argc, char *argv[])
 		}
 	}
 
+	if (nrun == 0) {
+		fputs("The number of runs must not equal zero.\n", stderr);
+		exit(EXIT_FAILURE);
+	}
+
 	execute(argv + optind, argc - optind);
 }
