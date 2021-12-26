@@ -31,8 +31,8 @@ parsenum(char *str, unsigned long *out)
 	unsigned long num;
 	char *numend;
 
-	num = strtoul(optarg, &numend, 10);
-	if (*optarg == '\0' || *numend != '\0') {
+	num = strtoul(str, &numend, 10);
+	if (*str == '\0' || *numend != '\0') {
 		return false;
 	}
 
@@ -142,7 +142,7 @@ runprg(char *args[], size_t len, unsigned long long *delta)
 int
 main(int argc, char *argv[])
 {
-	char opt;
+	int opt;
 
 	while ((opt = getopt(argc, argv, ":w:r:p:qvhm")) != -1) {
 		switch (opt) {
