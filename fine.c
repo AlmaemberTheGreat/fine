@@ -94,9 +94,9 @@ runprg(char *args[], size_t len, unsigned long long *delta)
 		exit(EXIT_FAILURE);
 	} else if (id > 0) {
 		/* parent process */
-		clock_gettime(CLOCK_MONOTONIC_RAW, &beg);
+		clock_gettime(CLOCK_MONOTONIC, &beg);
 		wait(&status);
-		clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+		clock_gettime(CLOCK_MONOTONIC, &end);
 		if (delta != NULL) *delta = (end.tv_sec - beg.tv_sec) * 1000000 + (end.tv_nsec - beg.tv_nsec) / 1000;
 	} else {
 		/* child process */
