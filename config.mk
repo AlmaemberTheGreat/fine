@@ -1,5 +1,5 @@
 # Basic information
-VERSION=1.0
+VERSION=1.0.1
 
 # Modify from here as needed to run on your system
 
