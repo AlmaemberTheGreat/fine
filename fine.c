@@ -64,7 +64,7 @@ execute(char *args[], size_t len)
 	unsigned long long delta,
 	                   whole = 0,
 	                   avg,
-	                   min = 0,
+	                   min = ULLONG_MAX,
 	                   max = 0;
 	double             maxsec,
 	                   minsec,
@@ -81,7 +81,7 @@ execute(char *args[], size_t len)
 		if (!quiet && !mout) prstat(TESTING, nrun, i + 1);
 		runprg(args, len, &delta);
 		whole += delta;
-		if (delta < min || min == 0) min = delta;
+		if (delta < min) min = delta;
 		if (delta > max) max = delta;
 		if (mout) printf("%f\n", (double)delta / 1000000);
 	}

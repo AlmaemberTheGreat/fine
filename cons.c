@@ -4,8 +4,6 @@
 
 #include "cons.h"
 
-#define ESC "\x1B"
-
 void
 prstat(enum Phase phase, unsigned long max, unsigned long val)
 {
@@ -17,7 +15,7 @@ prstat(enum Phase phase, unsigned long max, unsigned long val)
 		msg = "Testing...";
 
 	/* Go to beginning of line */
-	fputs(ESC "[1F" ESC "[K", stderr);
+	fputs("\x1b[1F\x1b[K", stderr);
 	fflush(stderr);
 
 	fprintf(stderr, "%s (%lu/%lu)\n", msg, val, max);
